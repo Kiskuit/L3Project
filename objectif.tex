@@ -1,0 +1,100 @@
+%-------------------------------------------------------------------------
+%
+% Master-2 NPAC 
+%
+% NPAC Lab Projects: template article
+%
+% The final article should not have more than 4 pages
+% you are not allowed to modify fonts, page size and margins.
+% Anything after the end of the 4th page will be ignored.
+%
+%-------------------------------------------------------------------------
+%
+% To compile your article with LaTeX, do this on the terminal:
+%   
+%        pdflatex article-template.tex
+%
+% This will produce a PDF file. Figures may be PDF files, images, etc.
+% If you have PS/EPS figures convert them first in PDF files.
+%
+% You may need to compile twice to get the references properly set.
+% 
+%-------------------------------------------------------------------------
+% 
+%
+\documentclass[final,twoside,twocolumn,10pt]{scrartcl}
+%
+\usepackage{npac}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
+\usepackage[french]{babel}
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{french}
+
+%
+\begin{document}
+%
+\title{Projet de recherche de L3}
+\subtitle{Comparaison de fonctions de hachage}
+\author{Florian \textsc{Reynier} \& Mathis \textsc{Caristan}}
+%
+\date{30/01/2016}
+
+\maketitle
+
+\section*{Résumé}
+	\label{sec:resume}
+	L'objectif du projet est de comparer différentes fonctions de hachage (non-cryptographique) du point de vue de leur complexité algorithmique et de leur uniformité dans la répartition des clés. On étudiera plusieurs fonctions utilisées couramment en informatique, que l'on testera sur différents fichiers source, de taille et de contenus variables.
+	
+	
+\section{Le hachage}
+	%Explications comment, pourquoi ...
+	Le hachage est un procédé qui utilise une fonction de hachage pour associer à un paramètre en entrée, une empreinte unique. Ceci permet plusieurs applications, notamment un accès rapide à des grandes bases de données, ou d'établir certaines relations (l'égalité ou la non-égalité) entre des données sans accéder directement à celles-ci. Le hachage permet également de ramener un grand espace de données (potentiellement infini), à un espace d'empreintes fini et de taille connue.\\
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[scale=0.3]{figures/hash}
+		\end{center}
+		\caption{Illustration d'une fonction de hachage.}
+		\label{fig:1}
+	\end{figure}\\
+	\par Il existe également des fonctions de hachage cryptographique à "sens unique" qui assurent une reconstruction des données à partir de l'empreinte impossible par calcul. Ces fonctions peuvent être utilisées pour vérifier qu'une entrée est associée à une empreinte donnée (dans l'authentification par mot de passe sous UNIX par exemple), mais nous n'étudierons pas ces fonctions dans le cadre de ce projet.
+	
+	
+\section{Méthodologie}
+	\subsection{Les outils}
+		Pour ce projet, nous allons utiliser l'OCaml comme langage de programmation. \texttt{(TODO : POURQUOI)}
+		De plus, nous utiliserons GitHub pour la gestion du code et des ressources\footnote{https://github.com/Kiskuit/L3Project.git}.
+		
+	\subsection{Les fonctions}
+		Sélection des fonctions (raisons?)
+		
+	\subsection{Les clefs}
+		Nous comptons constituer des corpus de différents types de clefs. Les types de clefs que nous envisageons pour le moment sont :
+		\begin{itemize}
+			\item[$\bullet$]Du texte en français,
+			\item[$\bullet$]Du texte en anglais,
+			\item[$\bullet$]Du code,
+			\item[$\bullet$]Des listes de log,
+			\item[$\bullet$]Des clés aléatoires,
+			\item[$\bullet$]Des QRcodes,
+		\end{itemize}
+		Nous constitueront les corpus à partir de sources libres de ces types de données, notamment la base de donnée du projet Gutemberg et des projets sur GitHub.
+		
+	\subsection{Points de comparaison}
+		L'uniformité de répartition des clefs (et le nombre de collision créées), ainsi que les vitesses d'exécution des algorithmes basés sur les diverses fonctions seront les points de comparaison principaux sur lesquels nous comptons travailler.
+
+\section{Analyse}
+	Pour évaluer la distribution des empreintes sur la taille de l'espace des empreintes, nous allons nous baser sur une analyse statistique des résultats. Dans le cas où une fonction viendrait à s'éloigner d'une distribution uniforme, il sera également possible de réaliser des ajustements de la distribution par différentes fonctions, et de chercher l'origine de cette irrégularité.
+
+\section{(Discussion)}
+	(Si besoin et idées)
+
+%
+% Non-BibTeX users please use
+
+
+
+\end{document}
