@@ -28,7 +28,8 @@
 	
 \section{Le hachage}
 	%Explications comment, pourquoi ...
-	Le hachage est un procédé qui utilise une fonction de hachage pour associer à un paramètre en entrée, une empreinte unique. Ceci permet plusieurs applications, notamment un accès rapide à des grandes bases de données, ou d'établir certaines relations (l'égalité ou la non-égalité) entre des données sans accéder directement à celles-ci. Le hachage permet également de ramener un grand espace de données (potentiellement infini), à un espace d'empreintes fini et de taille connue.\\
+	Le hachage est une technologie qui est aujourd’hui cruciale dans le monde de l’informatique, en effet elle utilisée dans de nombreux domaines comme la base de données, la programmation, les réseaux … Répondre à la problématique est donc intéressant dans la mesure où les résultats peuvent être utile à tout le monde.\\
+	\par Le hachage est un procédé qui utilise une fonction de hachage pour associer à un paramètre en entrée, une empreinte unique. Ceci permet plusieurs applications, notamment un accès rapide à des grandes bases de données, ou d'établir certaines relations (l'égalité ou la non-égalité) entre des données sans accéder directement à celles-ci. Le hachage permet également de ramener un grand espace de données (potentiellement infini), à un espace d'empreintes fini et de taille connue.\\
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[scale=0.3]{figures/hash}
@@ -40,12 +41,13 @@
 	
 	
 \section{Méthodologie}
-	\subsection{Les outils}
-		Pour ce projet, nous allons utiliser l'OCaml comme langage de programmation. \texttt{(TODO : POURQUOI)}
-		De plus, nous utiliserons GitHub pour la gestion du code et des ressources\footnote{https://github.com/Kiskuit/L3Project.git}.
+	\subsection{Organisation et outils}
+		Pour ce projet, nous allons utiliser l'OCaml comme langage de programmation.Ocaml est langage performant et 	adapté à ce projet, C’est de plus pour nous l’occasion de se familiariser avec un nouveau type de langage et de 	programmation. Nous pouvons donc en tirer un double bénéfice.
+	Ce projet étant réalisé en binôme, il est nécessaire de pouvoir se transmettre nos travaux le plus simplement possible. Nous allons donc utiliser un système de \“repository\”, Nous utiliserons donc Github pour la gestion du code et des ressources car c'est une valeur sûre\footnote{https://github.com/Kiskuit/L3Project.git}.
 		
 	\subsection{Les fonctions}
 		Sélection des fonctions (raisons?)
+		Il nous apparaît évident de premier abord qu’il nous sera impossible de dégager une fonction parmi celles testées qui sera meilleure que les autres. Il sera donc nécessaire de créer différentes catégories en y associant une fonction afin de répondre le plus précisément possible au sujet.
 		
 	\subsection{Les clefs}
 		Nous comptons constituer des corpus de différents types de clefs. Les types de clefs que nous envisageons pour le moment sont :
@@ -57,7 +59,7 @@
 			\item[$\bullet$]Des clés aléatoires,
 			\item[$\bullet$]Des QRcodes,
 		\end{itemize}
-		Nous constitueront les corpus à partir de sources libres de ces types de données, notamment la base de donnée du projet Gutemberg et des projets sur GitHub.
+		Nous constitueront les corpus à partir de sources libres de ces types de données, notamment la base de donnée du projet Gutemberg et des projets sur GitHub.L’enjeu du choix des clé est d’avoir un ensemble le plus hétérogène possible afin que les tests soient les plus complets possible, mais aussi de garder un ensemble de taille raisonnable afin de garder l'exécution des tests simple.
 		
 	\subsection{Points de comparaison}
 		L'uniformité de répartition des clefs (et le nombre de collision créées), ainsi que les vitesses d'exécution des algorithmes basés sur les diverses fonctions seront les points de comparaison principaux sur lesquels nous comptons travailler.
