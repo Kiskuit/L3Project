@@ -15,7 +15,7 @@
 %
 \title{Projet de recherche de L3}
 \subtitle{Comparaison de fonctions de hachage}
-\author{Florian \textsc{Reynier} \& Mathis \textsc{Caristan}}
+\author{Florian \textsc{Reynier} \& Mathis \textsc{Caristan}\\ \footnotesize{sous la responsabilité de Michèle \textsc{Soria}}}
 %
 \date{30/01/2016}
 
@@ -42,11 +42,12 @@
 	
 \section{Méthodologie}
 	\subsection{Organisation et outils}
-		Pour ce projet, nous allons utiliser OCaml comme langage de programmation. OCaml est un langage performant et 	adapté à ce projet. De plus, c'est un langage que nous ne connaissions pas avant le projet, et sera pour nous l'occasion d'apprendre un nouveau langage. Nous pouvons donc en tirer un double bénéfice.
+		Pour ce projet, nous allons utiliser OCaml comme langage de programmation. OCaml est un langage performant et 	adapté à ce projet. Mais surtout, c'est un langage que nous ne connaissions pas avant le projet, et ce sera pour nous l'occasion d'apprendre un nouveau langage. Nous pouvons donc en tirer un double bénéfice.
 	Ce projet étant réalisé en binôme, il est nécessaire de pouvoir échanger nos travaux, et gérer les différentes versions le plus simplement possible. Nous allons donc utiliser un système de gestion de version et de code source. Nous avons choisi pour cela Github car c'est une valeur sûre\footnote{https://github.com/Kiskuit/L3Project.git}. Enfin, nous utiliserons \LaTeX pour la production et présentation de fichiers pdf.\\
-	\par En ce qui concerne la manière de travailler en groupe, nous prévoyons de nous réunir régulièrement afin d'échanger sur les travaux accomplis depuis la réunion précédente, et de nous répartir les différentes tâches, qui seront ensuite réalisées individuellement.
+	\par En ce qui concerne la manière de travailler en groupe, nous prévoyons de nous réunir régulièrement afin d'échanger sur les travaux accomplis depuis la réunion précédente, et de nous répartir les différentes tâches, qui seront ensuite réalisées individuellement. Enfin, nous comptons écrire un rapport pour chaque réunion que nous auront avec notre encadrant.
 		
 	\subsection{Les fonctions}
+            Nous allons effectuer une selection de fonctions de hachage couramment utilisées que nous analyserons. \`A celles-ci s'ajouteront une fonction que de hachage dont nous concevrons l'algorithme. Cet exercice a évidemment pour but d'être purement éducatif, et la fonction ainsi créée n'aura pas pour ambition de rivaliser avec les fonctions les plus courantes.\\
 		Il nous apparaît évident de premier abord qu'il nous sera impossible de dégager une fonction parmi celles testées comme étant meilleure que les autres à tout point de vue. Il sera donc nécessaire de créer différentes catégories de types de fichiers et de trouver la fonction qui y correspond le mieux, afin de répondre le plus précisément possible au sujet.
 		
 	\subsection{Les clefs}
@@ -59,13 +60,32 @@
 			\item[$\bullet$]Des clés aléatoires,
 			\item[$\bullet$]Des QRcodes,
 		\end{itemize}
-		Nous constituerons les corpus à partir de sources libres de ces types de données, notamment la base de donnée du projet Gutemberg et de projets sur GitHub. L'enjeu du choix des clé est d'avoir un ensemble le plus hétérogène possible afin que les tests soient les plus complets possible, mais aussi de garder un ensemble de taille raisonnable afin de garder l'exécution des tests simple.
+		Nous constituerons les corpus à partir de sources libres de ces types de données, notamment la base de données du projet Gutemberg et de projets sur GitHub. L'enjeu du choix des clefs est d'avoir un ensemble le plus hétérogène possible afin que les tests soient les plus complets possible, mais aussi de garder un ensemble de taille raisonnable afin de garder l'exécution des tests simple.
 		
 	\subsection{Points de comparaison}
-		L'uniformité de répartition des clefs (et le nombre de collision créées), ainsi que les vitesses d'exécution des algorithmes basés sur les diverses fonctions seront les points de comparaison principaux sur lesquels nous comptons travailler.
+		L'uniformité de répartition des clefs (et le nombre de collision créées), ainsi que la vitesse d'exécution des algorithmes basés sur les diverses fonctions seront les points de comparaison principaux sur lesquels nous comptons travailler.
 
 \section{Analyse}
 	Pour évaluer la distribution des empreintes sur la taille de l'espace des empreintes, nous allons nous baser sur une analyse statistique des résultats. Dans le cas où une fonction viendrait à s'éloigner d'une distribution uniforme, il sera également possible de réaliser des ajustements de la distribution par différentes fonctions, et de chercher l'origine de cette irrégularité.
+
+
+\begin{thebibliography}{9}
+    \bibitem{Knuth}
+        Donald E. Knuth,
+        \emph{The art of Computer Programming \small{Vol. 3 : Sorting \& Searching}}.
+                                Addison Wesley, Massachusetts,
+                                    2nd Edition,
+                                        1998
+    \bibitem{Gaudel/Soria}
+        Marie-Claude Gaudel, Michèle Soria, Christine Froidevaux,
+            \emph{Types de données et algorithmes}. Ediscience international, Paris,
+                                                        1993.
+    \bibitem{Pigeon}
+        Steven Pigeon,
+            \emph{Fonctions de hash : Tester une fonction de hash}.
+                            website : \url{http://www.stevenpigeon.com/Algorithmes/tables_hash/}, visité le 02/02/16.
+\end{thebibliography}
+
 
 
 
