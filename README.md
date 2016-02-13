@@ -1,5 +1,5 @@
 # L3Project
-L3 Project : comparison of hashFunctions
+## L3 Project : comparison of hashFunctions
 
 This project takes place in the frame of the second semester of my L3 at UPMC.
 The goal is to chose and compare some hash functions (non cryptographic), on their homogeinity of keys distribution.
