@@ -1,0 +1,12 @@
+# Latex  output compilation files #
+###################################
+*.aux
+*.log
+# OCaml compilation files #
+###########################
+*.cmi
+*.cmo
+# Input/Ouput files#
+####################
+*.in
+*.out
