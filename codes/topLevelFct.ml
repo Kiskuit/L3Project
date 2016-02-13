@@ -1,32 +1,32 @@
-(* PARAMETERS THAT WILL BE SET *)
-let filename = ref "";;
-let size_of_hashtable = ref 0;;
-let fct_to_use = ref (-1);;
-let number_of_fct = 2;;
-
-
-
-(* Asks user what is the document that should be read *)
+open MyHash;;
+(* -------------------------------
+ * Recuperation of parameters
+ * ------------------------------*)
+(* At execution : asks user what is the document that should be read
+ * Then, returns the string read *)
 let get_filename =
     print_string "Please give the path to the file you want to hash : ";
-    filename := read_line ();
+    let filename = read_line () in
     print_string "\n------------------------------------------\n";
-    print_string "------------------------------------------\n";;
+    print_string "------------------------------------------\n";
+    filename;;
 
-(* Asks user what will bethe size of the hashtable *)
+(* At execution : asks user what will bethe size of the hashtable 
+ * Then, returns this value *)
 let get_size = 
+    let size_of_hashtable = ref 0 in
     while ( not (!size_of_hashtable = 16 || !size_of_hashtable = 32) ); do
         print_string "Please give the size of the hashTable in power of 2 (16 or 32) : 2^";
         size_of_hashtable := read_int ();
     done;
     print_string "\n------------------------------------------\n";
-    print_string "------------------------------------------\n";;
+    print_string "------------------------------------------\n";
+    !size_of_hashtable;;
 
-(* TODO
- * DUMMY function serving as placeholder *)
-let dummy_fct = ();;
-(* Asks which function will be used *)
+(* At execution : asks which function will be used 
+ * Then, returns the function which will be used *)
 let get_fct =
+    let fct_to_use = ref (-1) and number_of_fct = 2 in
     while ( !fct_to_use < 0 || !fct_to_use >= number_of_fct ); do
         print_string "0 : myHash function \n";
         print_string "1 : xxHash function (size of the hashtable is set to 2^32)\n";
@@ -36,11 +36,29 @@ let get_fct =
     print_string "\n------------------------------------------\n";
     print_string "------------------------------------------\n";
     print_string "------------------------------------------\n";
+    (* DUMMY function serving as placeholder *)
+    let dummy_fct i = i+2 in 
     match !fct_to_use with
     |0 -> dummy_fct
     |1 -> dummy_fct
     |_ -> dummy_fct;;
 
-get_filename;;
-get_size;;
-number_of_fct;;
+(* -------------------------------
+ * Creation of the hashtable
+ * And the tools we need to use it
+ * ------------------------------*)
+let hashtable = Hashtbl.create (int_of_float (2. ** (float get_size)));;
+Hashtbl.add hashtable 1 22;;
+
+(* Checks if the hashtable contains a certain key *)
+let contains ht k = 
+    let list_k = Hashtbl.find_all ht (get_fct k) in
+    let rec helper = function
+        |[] -> false
+        |a::t -> if (a=k) then true else (helper t)
+    in helper list_k;;
+
+(* Adds a pair (key,hash(key) to the hashtable, if it's not inside already *)
+let add_couple ht k = 
+    let v = get_fct k in
+    if (contains ht k) then () else Hashtbl.add ht v k;;
