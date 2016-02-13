@@ -1,0 +1,57 @@
+\documentclass[final,twoside,article,10pt]{scrartcl}
+%
+\usepackage{npac}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
+\usepackage[french]{babel}
+\usepackage[fixlanguage]{babelbib}
+\usepackage{hyperref}
+\selectbiblanguage{french}
+
+%
+\begin{document}
+%
+\title{Compte Rendu Projet 3I013}
+\subtitle{N°2: Récapitulatif du travail accompli
+\author{Florian \textsc{Reynier} \& Mathis \textsc{Caristan}}
+%
+\date{09/02/2016}
+
+\maketitle
+
+\section{Résumé des idées de la réunion}
+	
+	Dans cette réunion il y a eu peu de changement sur les objectifs précédemment donnés nous continuons 
+	donc sur le chemin que nous avons pris, notre principal tâche est de créer un histogramme des 
+	performances des fonctions implantées puis de commencer à ajouter de nouvelles. 
+	
+\section{Création de notre fonction de hachage et implantation de XXHash}
+\subsection*{monHash}
+\subsection*{XXHash}
+
+	La première tâche que j'ai entrepris a été de me documenter sur la fonction XXHash, la meilleure
+	source d'information que j'ai pu trouver est une version en C de cette fonction bien documentée
+	et complète.\\
+	\paragraph Un premier problème de taille m'est alors apparu car XXhash est une fonction très 
+	complexe, avec une optimisation très poussée allant jusqu'au moyen ou les données sont stockées
+	en mémoire. Etant débutant en OCAML il m'a semblé impossible de recoder ces 1700 lignes de codes 
+	complexe dans un langage que je maitrise peu pour le moment.\\
+	\paragraph La soultion qui m'a semblé la meilleure a été de récupérer la fonction C utilisée
+	comme documentation et de l'appeler dans une fonction OCAML. Cette fonction est opensource et
+	peut etre trouvée ici:
+	la fonction OCAML est définie comme suit:\\
+	\"external\" précise que la fonction n'appartient pas à OCAML\\
+	Le "main" de la fonction C a du être transformée au niveau de son type de retour et de ses retours.\\
+	enfin les nombreux paramètres de la fonction, sont utilisable car la fonction OCAML transmet
+	le pointeur sur son tableau d'argument, ceux ci peuvent donc être facilement récupéré\\
+	En conclusion on a donc une fonction utilisable en OCAML aussi complète que son original en C
+	pour un coût très réduit en temps.
+%
+% Non-BibTeX users please use
+
+
+
+\end{document}
