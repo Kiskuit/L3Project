@@ -14,14 +14,25 @@
 \begin{document}
 %
 \title{Compte Rendu de Projet de recherche de L3}
-\subtitle{N\degre 2 : Explications du raisonnement.}
+\subtitle{N\degre 2 : Récapitulatif travail réalisé \& explications du raisonnement.}
 \author{Florian \textsc{Reynier} \& Mathis \textsc{Caristan}}
 %
 \date{11/02/2016}
 
 \maketitle
 
-\section{Explication de la création de notre fonction de hachage}
+\section{Résumé des idées de la réunion}
+    Suite à cette réunion, il y a eu peu de changements sur les objectifs précédemment définis, nous continuons donc sur le chemin que nous avions pris.
+    Notre principale tâche est de créer un histogramme des performances des fonctions implantées, puis, de commencer à implanter de nouvelles fonctions.
+\section{Explications concernant la fonction xxHash}
+    La première tâche que nous avons entrepris a été de nous documenter sur la fonction xxHash. Pour cela, la meilleure source d'informations que nous avons trouvé est un projet github implémentant la fonction en C \cite{github}. Le projet est bien documenté, permettant une bonne compréhension.\\
+    Un premier problème de taille nous est alors apparu, car xxHash est une fonction \textbf{extrêmement} optimisée (\cite{xxhash} indique une vitesse 2 à 10 fois plus rapide que la plupart des meilleurs fonctions).
+    Ré-écrire les quelques 1700 lignes de code, et adapter le travail d'optimisation pour l'utiliser en OCaml ne semble \textit{a priori} pas un travail réalisable dans le cadre de ce projet, en particulier en considérant que notre niveau en OCaml est probablement loin d'être suffisant.\\
+    En conséquence, la meilleure solution nous a semblé de récupérer la fonction C utilisée, et de l'appeler dans une fonction OCaml grâce à la fonction "\texttt{external}" d'OCaml.\\
+    Cependant, pour pouvoir l'utiliser, nous avons tout de même du apporter quelques modifications au fichier C, notamment sur le type de retour. Il est possible de transmettre des paramètres à la fonction C, car grâce à l'utilisation de \texttt{external}, OCaml transmet à la fonction C un pointeur sur un tableau d'arguments.\\
+    En conclusion, nous pouvons utiliser la fonction xxHash  de manière optimale sans que le travail ait été hors de portée.
+
+\section{Explications concernant notre fonction de hachage}
     La création de la fonction de hachage a été réalisée en s'aidant des remarques du livre \emph{Types de données et algorithmes} \cite{soria}.\\
     La construction de la fonction de hachage a été faite en plusieurs étapes. Nous avons dans un premier temps décidé d'associer à chaque caractère $c$, une valeur $v_{|10}$. Puis, cette valeur $v_{|10}$ a été convertie en binaire pour obtenir $v_{|2}$. Un mot $m$ était donc représenté par une suite $S$ d'élément binaires. Pour contracter cette suite $S$, nous avons choisi de la découper en "sous-suites" $s_i$ de longeur $l$, et d'appliquer une opération binaire $o$ entres les $s_i$, pour obtenir une unique suite $s_f$ de taille $l$. Cette suite était alors reconvertie en décimale pour obtenir la valeur $e$. Enfin, la dernière étape a consistée à appliquer la fonction $f_{mult}$ à $e$ (voir équation \ref{eq:mult}), afin d'obtenir $f_{mult}(e) = h$, la valeur de hachage du mot.
     \begin{equation}
@@ -53,6 +64,10 @@
     \begin{thebibliography}{9}
     \bibitem{soria}
         Marie-Claude Gaudel, Michèle Sorian Christine Froidevaux, \emph{Types de données et algorithmes}. Ediscience internationnal, Paris, 1993.
+    \bibitem{github}
+        Yann \textit{Cyan4973} Collet, \emph{xxHash GitHub project page}. Website : \url{https://github.com/Cyan4973/xxHash}, visité le 09/02/16.
+    \bibitem{xxhash}
+        Yann \textit{Cyan4973} Collet, \emph{xxHash - Extremely fast non-cryptographic hash algorithm}. Website : \url{http://www.xxhash.com/}, visité le 09/02/16.
 \end{thebibliography}
 
 \end{document}
