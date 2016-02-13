@@ -1,0 +1,10 @@
+# OCaml compilation files #
+###########################
+*.mli
+*.mlo
+*.out
+
+# Input/output files #
+######################
+*.in
+*.out
