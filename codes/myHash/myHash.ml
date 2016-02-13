@@ -2,6 +2,7 @@
  * PARAMETERS OF THE PROGRAM
  * -----------------------------------------------
  *)
+(*TODO : make size depend on input value *)
 let size_of_table = 16
 let theta = 0.6180339887
 
