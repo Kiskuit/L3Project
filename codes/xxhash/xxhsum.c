@@ -506,20 +506,20 @@ static void BMK_sanityCheck(void)
 *  File Hashing
 **********************************************************/
 
-static void BMK_display_LittleEndian(const void* ptr, size_t length)
+static void BMK_display_LittleEndian(const void* ptr, size_t length, FILE* outFile)
 {
     const BYTE* p = (const BYTE*)ptr;
     size_t index;
     for (index=length-1; index<length; index--)    /* intentional underflow to negative to detect end */
-        DISPLAYRESULT("%02x", p[index]);
+        fprintf(outFile,"%02x", p[index]);
 }
 
-static void BMK_display_BigEndian(const void* ptr, size_t length)
+static void BMK_display_BigEndian(const void* ptr, size_t length, FILE* outFile)
 {
     const BYTE* p = (const BYTE*)ptr;
     size_t index;
     for (index=0; index<length; index++)
-        DISPLAYRESULT("%02x", p[index]);
+        fprintf(outFile,"%02x", p[index]);
 }
 
 
@@ -530,8 +530,9 @@ static int BMK_hash(const char* fileName,
                     const endianess displayEndianess)
 {
     FILE*  inFile;
+    FILE* outFile;
     size_t const blockSize = 64 KB;
-    size_t readSize;
+    int readSize;
     void*  buffer;
     XXH64_CREATESTATE_STATIC(state64);
     XXH32_CREATESTATE_STATIC(state32);
@@ -543,8 +544,9 @@ static int BMK_hash(const char* fileName,
         SET_BINARY_MODE(stdin);
     }
     else
-        inFile = fopen( fileName, "rb" );
-    if (inFile==NULL)
+        inFile = fopen( fileName, "r" );
+	outFile = fopen("Result.txt", "w");
+    if (inFile==NULL || outFile == NULL)
     {
         DISPLAY( "Pb opening %s\n", fileName);
         return 1;
@@ -577,10 +579,10 @@ static int BMK_hash(const char* fileName,
     }
 
     /* Load file & update hash */
-    readSize = 1;
-    while (readSize)
+    readSize = fscanf(inFile,"%s",buffer);
+   while (readSize != EOF)
     {
-        readSize = fread(buffer, 1, blockSize, inFile);
+    	
         switch(hashType)
         {
         case algo_xxh32:
@@ -592,10 +594,7 @@ static int BMK_hash(const char* fileName,
         default:
             break;
         }
-    }
-    fclose(inFile);
-    free(buffer);
-
+    
     /* display Hash */
     switch(hashType)
     {
@@ -605,8 +604,8 @@ static int BMK_hash(const char* fileName,
             XXH32_canonical_t hcbe32;
             XXH32_canonicalFromHash(&hcbe32, h32);
             displayEndianess==big_endian ?
-                BMK_display_BigEndian(&hcbe32, sizeof(hcbe32)) : BMK_display_LittleEndian(&hcbe32, sizeof(hcbe32));
-            DISPLAYRESULT("  %s\n", fileName);
+                BMK_display_BigEndian(&hcbe32, sizeof(hcbe32),outFile) : BMK_display_LittleEndian(&hcbe32, sizeof(hcbe32),outFile);
+	    fputs(" ",outFile);
             break;
         }
     case algo_xxh64:
@@ -615,13 +614,17 @@ static int BMK_hash(const char* fileName,
             XXH64_canonical_t hcbe64;
             XXH64_canonicalFromHash(&hcbe64, h64);
             displayEndianess==big_endian ?
-                BMK_display_BigEndian(&hcbe64, sizeof(hcbe64)) : BMK_display_LittleEndian(&hcbe64, sizeof(hcbe64));
-            DISPLAYRESULT("  %s\n", fileName);
+                BMK_display_BigEndian(&hcbe64, sizeof(hcbe64),outFile) : BMK_display_LittleEndian(&hcbe64, sizeof(hcbe64),outFile);
+            fputs(" ",outFile);
             break;
         }
     default:
             break;
     }
+	readSize = fscanf(inFile,"%s",buffer);
+} 
+      fclose(inFile);
+    free(buffer);
 
     return 0;
 }
