@@ -687,7 +687,7 @@ CAMLprim value xx32sum_main(value ml_array)
     const char* exename = String_val(Field(ml_array,0));
 
     U32 benchmarkMode = 0;
-    algoType algo = g_defaultAlgo
+    algoType algo = g_defaultAlgo;
     endianess displayEndianess = big_endian;
 
     /* special case : xxh32sum default to 32 bits checksum */
