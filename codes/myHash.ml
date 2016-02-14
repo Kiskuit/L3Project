@@ -99,7 +99,7 @@ let binList_to_dec lst =
 (* Last step of the calculation of the hash value
  * multiplication by theta (theoeretical calculations give best value)
  * and re-scaled to the size of the hashtable *)
-let multiply e = floor ( (e*.theta -. floor(e*.theta)) *. 2.**(float)size_of_table);;
+let multiply e = int_of_float ( (e*.theta -. floor(e*.theta)) *. 2.**(float)size_of_table);;
 
 
 (* HASH FUNCTION *)

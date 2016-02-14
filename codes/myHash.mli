@@ -1,0 +1,1 @@
+val myHash : string -> int
