@@ -1,1 +1,0 @@
-val myHash : string -> float
