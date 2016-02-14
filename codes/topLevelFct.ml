@@ -11,20 +11,6 @@ let get_filename =
     print_string "------------------------------------------\n";
     filename;;
 
-(* At execution : asks user what will bethe size of the hashtable 
- * Then, returns this value *)
-let get_size = 
-    let size_of_hashtable = ref 0 in
-    while ( not (!size_of_hashtable = 16 || !size_of_hashtable = 32) ); do
-        print_string "Please give the size of the hashTable in power of 2 (16 or 32) : 2^";
-        size_of_hashtable := read_int ();
-    done;
-    print_string "\n------------------------------------------\n";
-    print_string "------------------------------------------\n";
-    !size_of_hashtable;;
-let get_real_size () = 
-    int_of_float(2. ** (float get_size));;
-
 (* At execution : asks which function will be used 
  * Then, returns the function which will be used *)
 let get_fct =
