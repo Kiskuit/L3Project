@@ -22,6 +22,8 @@ let get_size =
     print_string "\n------------------------------------------\n";
     print_string "------------------------------------------\n";
     !size_of_hashtable;;
+let get_real_size () = 
+    int_of_float(2. ** (float get_size));;
 
 (* At execution : asks which function will be used 
  * Then, returns the function which will be used *)
@@ -37,9 +39,9 @@ let get_fct =
     print_string "------------------------------------------\n";
     print_string "------------------------------------------\n";
     (* DUMMY function serving as placeholder *)
-    let dummy_fct i = i+2 in 
+    let dummy_fct s = if (s="test") then 1 else 2 in
     match !fct_to_use with
-    |0 -> dummy_fct
+    |0 -> myHash
     |1 -> dummy_fct
     |_ -> dummy_fct;;
 
@@ -47,8 +49,9 @@ let get_fct =
  * Creation of the hashtable
  * And the tools we need to use it
  * ------------------------------*)
-let hashtable = Hashtbl.create (int_of_float (2. ** (float get_size)));;
-Hashtbl.add hashtable 1 22;;
+let hashtable = Hashtbl.create (get_real_size ());;
+Hashtbl.add hashtable 0 "test";;
+Hashtbl.remove hashtable 0;;
 
 (* Checks if the hashtable contains a certain key *)
 let contains ht k = 
@@ -60,5 +63,51 @@ let contains ht k =
 
 (* Adds a pair (key,hash(key) to the hashtable, if it's not inside already *)
 let add_couple ht k = 
-    let v = get_fct k in
+    let v = (get_fct k) in
     if (contains ht k) then () else Hashtbl.add ht v k;;
+
+let output_hashtable ht =
+    let oc = open_out "output.out" and i = ref 0 in
+    while (!i<(get_real_size ())); do
+        let size_list = List.length (Hashtbl.find_all hashtable !i) in
+        Printf.fprintf oc "%d\t%d\n" !i size_list;
+        i:=!i+1;
+    done;
+    close_out oc;;
+
+(* -------------------------------------------
+ * Transforms a line into a list of words
+------------------------------------------- *)
+let line_to_words line =
+    let rec helper l w =
+        if (String.contains l ' ')
+        then let i = (String.length l) and j = (String.index_from l 0 ' ') in
+        helper (String.sub l (j+1) (i-j-1)) ((String.sub l 0 j)::w)
+        else (l::w)
+    in helper line [];;
+
+(*---------------------------------------------------
+ * Opens input file, reads through it
+ * hashes every word, and stores it into the table
+---------------------------------------------------*)
+let hash_file filename = 
+    (*Opens an input channel, and init. a reference to store the line*)
+    let ic = open_in filename and line = ref "" in
+    (*Recursively add every element of the list to hashtable*)
+    let rec helper = function
+        |[] -> ()
+        |h::t -> add_couple hashtable h;
+                helper t in
+    try 
+        (*Goes through every line until EOL*)
+        while true; do
+            line := input_line ic;
+            helper (line_to_words !line);
+        done;
+    (*If EOL, just close file,
+     * else, close file with error and raise it*)
+    with
+    |End_of_file -> close_in ic
+    |e -> close_in_noerr ic;
+            raise e;;
+
