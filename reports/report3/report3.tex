@@ -1,0 +1,72 @@
+\documentclass[final,twoside,article,10pt]{scrartcl}
+%
+\usepackage{npac}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc} 
+\usepackage[french]{babel}
+\usepackage[fixlanguage]{babelbib}
+\selectbiblanguage{french}
+
+%
+\begin{document}
+%
+\title{Compte Rendu de Projet de recherche de L3}
+\subtitle{N\degre 3 : Mise au point \& Changements}
+\author{Florian \textsc{Reynier} \& Mathis \textsc{Caristan}}
+%
+\date{16/02/2016}
+
+\maketitle
+
+\section*{Résumé de la réunion}
+    Au cours de la réunion, plusieurs points ont été abordés.
+    Dans un premier temps, nous avons discuté d'un paramètre de notre fonction de hachage.
+    Puis nous avons étudié les résultats préliminaires que nous avions obtenu.
+    Enfin, nous avons soulevé un problème que nous avons rencontré, et de la manière de le résoudre.
+
+\section{Le paramètre de notre fonction de hachage.}
+    La taille des sous-chaînes $s_i$ dans notre fonction a été le premier point de discussion.
+    \'Etant donné que nous avons travaillé avec une table de taille $2^{16}$, il était nécessaire de prendre des sous-chaînes d'au moins 16 bits de long. Dans le cas contraire, le nombre de sous-chaînes possibles aurait été inférieur à la taille de la table, impliquant que des valeurs de la table n'aurait jamais été associées à des clefs.
+    En revanche, il était moins évident de justifier pourquoi la taille des sous-chaînes n'était pas supérieure à celle de la taille.
+    Sur ce point, il convient d'étudier un instant le comportement de la fonction pour des mots courts.
+    Prenons par exemple les mots "\texttt{ABC}", "\texttt{BCA}", "\texttt{DEFG}" et "\texttt{FGDE}". Nous remarquons immédiatement que les deux premiers sont une permutation l'un de l'autre, de même que pour les deux derniers.
+    Chaque lettre étant codée sur 5bits, les deux premiers correpondent à une chaîne de 15bits, tandis que les deux autres une chaîne de 20bits.
+    Pour la suite de la fonction, chaque mot est découpé en chaînes de 16bits de long (complétées par des bits à 0 si besoin).
+    Dès lors, il apparaît que \texttt{ABC} et \texttt{BCA} (ainsi que toutes autres les autres permutations) correpondent à la même valeur de hachage.
+    Bien que cela ne soit pas le cas pour \texttt{DEFG} et \texttt{FGDE}, un découpage en chaînes plus longues (20bits ou plus) entraînerait le même comportement.
+    Une solution pour éviter ce comportement (quand on testera la fonction sur 32bits par exemple) pourrait d'appliquer une permutation des séquences correspondant aux lettres selon leur place dans le mot (les 5bits de la première lettre ne sont pas permutés, ceux de la deuxième lettre sont permutés cycliquement d'un "cran" etc.) 
+
+\section{Résultats préliminaires et changement de langage}
+    Les premiers résultats de notre fonction de hachage sont excessivement mauvais.
+    Bien que nous ne nous attendions pas à ce que cette fonction révolutionne le hachage, les résultats obtenus semblent particulièrement mauvais (sur un texte de 200 000 mots, et une table de taille 65 000, le taux d'occupation est inférieur à 10\%, et un nombre de collision moyen d'environ 70, avec jusqu'à 2800 collisions pour la valeur 0).
+    Ceci nous laisse supposer de la présence d'une erreur dans le code de la fonction de hachage.
+    Cette supposition est d'autant plus crédible du fait de la méthode employée dans le code.
+    \'Etant donnée que le type char n'existe pas en OCaml, et que le langage ne permet pas de manipuler un entier en passant par sa représentation binaire, nous avons choisi de représenter les lettres et mots par des listes de booléens.
+    \par Cette observation, ainsi que l'étude d'autres fonctions de hachage, souvent basées sur les manipulations de bits, nous a mené à la conclusion que l'OCaml n'était sans doutes pas le langage le plus adapté pour l'écriture de fonctions de hachage. En conséquence, nous avons choisi de modifier le langage du projet.
+    Nous comptons écrire les fonctions suivantes, et ré-ecrire notre fonction de hachage, en C, et les interfacer avec de l'OCaml pour leur utilisation.
+    Ainsi, nous continuerons à utiliser (et apprendre) l'OCaml, mais en écrivant de manière plus simple le c\oe ur des fonctions.
+
+
+\section{Problème}
+    Lorsque nous avons essayé de créer un histogramme des résultats de notre fonction de hachage, nous nous sommes retrouvés confrontés à un léger problème.
+    Le logiciel que nous utilisons (LibreOffice Calc) ne permet pas une "belle" présentation sous forme d'histogramme d'un échantillon d'environ 65000 données.
+    Pour résoudre le problème, nous allons essayer de refaire l'histogramme sur un autre logiciel, et dans le cas ou cela ne fonctionnerait pas non plus, nous travaillerons à la place sur un échantillon plus réduit de données (une table de $2^{10}$ voire moins si nécessaire), pour permettre une représentation graphique des résultats.
+    Ces travaux sur des tables de taille réduites ne devraient cependant servir que pour illustrer les propriétés des fonctions, le réel travail d'analyse se fera toujours sur des tables de taille plus importante ($2^{16}$ et $2^{32}$).
+
+\section*{Objectifs}
+% Je te laisse parler des objectifs : -toujours faire 2 histos propre, sur moins de points (1024?)
+                                %- rajouter djb2, sdbm, murmur
+% Explique aussi du problème qu'on a eu avec xxHash, et comment tu l'as corrigé.
+% --> Je te laisse choisir si tu rajoutes une section ou si tu l'ajoutes à une de celle qu'il y a deja; rajoute un mot a propos de ça aussi dans l'intro
+
+
+%\begin{thebibliography}{9}
+        %TODO : EXAMPLE FOR PRESENTATION TO BE REMOVED
+ %   \bibitem{soria}
+  %      Marie-Claude Gaudel, Michèle Sorian Christine Froidevaux, \emph{Types de données et algorithmes}. Ediscience internationnal, Paris, 1993.
+%\end{thebibliography}
+
+\end{document}
