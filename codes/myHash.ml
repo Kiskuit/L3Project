@@ -20,14 +20,6 @@ let size_of_table = get_size
 let theta = 0.6180339887
 
 
-
-
-
-
-
-
-
-
 (* Transforms a string into a list of char*)
 let explode s =
   let rec exp i l =
