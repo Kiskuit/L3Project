@@ -25,7 +25,7 @@
     Au cours de la réunion, plusieurs points ont été abordés.
     Dans un premier temps, nous avons discuté d'un paramètre de notre fonction de hachage.
     Puis nous avons étudié les résultats préliminaires que nous avions obtenu.
-    Nous avons evoqué les changement entrepris dans notre fonction XXHash.
+    Nous avons evoqué les changement entrepris dans notre fonction xxHash.
     Enfin, nous avons soulevé un problème que nous avons rencontré, et de la manière de le résoudre.
 
 \section{Le paramètre de notre fonction de hachage.}
@@ -50,9 +50,9 @@
     Nous comptons écrire les fonctions suivantes, et ré-ecrire notre fonction de hachage, en C, et les interfacer avec de l'OCaml pour leur utilisation.
     Ainsi, nous continuerons à utiliser (et apprendre) l'OCaml, mais en écrivant de manière plus simple le c\oe ur des fonctions.
     
-    \section{Adaptation de la fonction XXHash}
-    La fonction XXHash est en général utilisée pour calculer des checksum, après discution il a donc été décidé de modifier 
-    cette fonction afin de non pas calculer un hash pour tout le fichier, mais un hash par mot dans le fichier. Cette modification a nécessité de changer du code en profondeur, en effet la fonction réalisais le hash du fichier en lisant celuis ci par bloc de 64ko, il a donc fallu changer de fonction de lecture de fichier afin de pouvoir récupérer le flux non pas de bloc en bloc fixe mais de mots en mots. Il a aussi été décidé de rediriger la sortie des hash vers un fichier.
+    \section{Adaptation de la fonction xxHash}
+    La fonction xxHash est en général utilisée pour calculer des checksum, après discussion il a donc été décidé de modifier 
+    cette fonction afin de non pas calculer un hash pour tout le fichier, mais un hash par mot dans le fichier. Cette modification a nécessité de changer du code en profondeur, en effet la fonction réalisait le hash du fichier en lisant celuis ci par bloc de 64ko, il a donc fallu changer de fonction de lecture de fichier afin de pouvoir récupérer le flux non pas de bloc en bloc fixe mais de mots en mots. Il a également été décidé de rediriger la sortie des hash vers un fichier.
 
 
 \section{Problème}
@@ -64,7 +64,7 @@
 
 \section*{Objectifs}
 
-Nos objectifs prioritaires sont en premier lieu de pouvoir réaliser deux histogrammes clairs et lisibles, pour cela nous avons choisi de réduire le nombre de points afin de pallier le problème du nombre de points. Par la suite il sera intéressant de commencer à implanter de nouvelles fonction et notre choix s'est porté sur sdbm, de réputation peu efficace, murmurhash un candidat serieux à XXHash, et djb2 qui représente un interêt de par sa conception.
+Nos objectifs prioritaires sont en premier lieu de pouvoir réaliser deux histogrammes clairs et lisibles, pour cela nous avons choisi de réduire le nombre de points afin de pallier le problème du nombre de points. Par la suite il sera intéressant de commencer à implanter de nouvelles fonction et notre choix s'est porté sur sdbm, de réputation peu efficace, murmurhash un candidat serieux à xxHash, et djb2 qui présente un interêt de par sa conception.
 % Je te laisse parler des objectifs : -toujours faire 2 histos propre, sur moins de points (1024?)
                                 %- rajouter djb2, sdbm, murmur
 % Explique aussi du problème qu'on a eu avec xxHash, et comment tu l'as corrigé.
