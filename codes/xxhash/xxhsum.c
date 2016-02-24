@@ -147,7 +147,7 @@ static const char author[] = "Yann Collet";
 #define MAX_MEM    (2 GB - 64 MB)
 
 static const char stdinName[] = "-";
-typedef enum { algo_xxh32, algo_xxh64 } algoType;
+typedef enum { algo_xxh8, algo_xxh16, algo_xxh32, algo_xxh64 } algoType;
 static const algoType g_defaultAlgo = algo_xxh64;    /* required within main() & usage() */
 
 
@@ -529,86 +529,59 @@ static int BMK_hash(const char* fileName,
                     const algoType hashType,
                     const endianess displayEndianess)
 {
-    FILE*  inFile;
-    FILE* outFile;
-    size_t const blockSize = 64 KB;
-    int readSize;
-    void*  buffer;
+  
     XXH64_CREATESTATE_STATIC(state64);
     XXH32_CREATESTATE_STATIC(state32);
-
-    /* Check file existence */
-    if (fileName == stdinName)
-    {
-        inFile = stdin;
-        SET_BINARY_MODE(stdin);
-    }
-    else
-        inFile = fopen( fileName, "r" );
-	outFile = fopen("Result.txt", "w");
-    if (inFile==NULL || outFile == NULL)
-    {
-        DISPLAY( "Pb opening %s\n", fileName);
-        return 1;
-    }
-
-    /* Memory allocation & restrictions */
-    buffer = malloc(blockSize);
-    if(!buffer)
-    {
-        DISPLAY("\nError: not enough memory!\n");
-        fclose(inFile);
-        return 1;
-    }
+    int readSize = strlen(fileName);
+    unsigned int result; // in case of 64 change it to long
+    char *hexstring = malloc(sizeof(char)*8);
 
     /* Init */
     XXH32_reset(state32, 0);
     XXH64_reset(state64, 0);
 
-    /* loading notification */
-    {
-        const size_t fileNameSize = strlen(fileName);
-        const char* const fileNameEnd = fileName + fileNameSize;
-        const size_t maxInfoFilenameSize = fileNameSize > 30 ? 30 : fileNameSize;
-        size_t infoFilenameSize = 1;
-        while ( (infoFilenameSize < maxInfoFilenameSize)
-              &&(fileNameEnd[-infoFilenameSize-1] != '/')
-              &&(fileNameEnd[-infoFilenameSize-1] != '\\') )
-              infoFilenameSize++;
-        DISPLAY("\rLoading %s...                        \r", fileNameEnd - infoFilenameSize);
-    }
-
+   
     /* Load file & update hash */
-    readSize = fscanf(inFile,"%s",buffer);
-   while (readSize != EOF)
-    {
     	
         switch(hashType)
         {
         case algo_xxh32:
-            XXH32_update(state32, buffer, readSize);
+            XXH32_update(state32, fileName, readSize);
             break;
-        case algo_xxh64:
-            XXH64_update(state64, buffer, readSize);
-            break;
+        /*case algo_xxh64:
+            XXH64_update(state64, fileName, readSize); // caml out of bound
+            break;*/
         default:
+	    XXH32_update(state32, fileName, readSize);
             break;
         }
     
     /* display Hash */
     switch(hashType)
     {
+    case algo_xxh8:
+        {
+            U32 h32 = XXH32_digest(state32);
+	    sprintf(hexstring,"%x",h32);
+	    hexstring[strlen(hexstring)/4]=0;
+	    result = (int)strtol(hexstring, NULL, 16);
+            break;
+        }
+    case algo_xxh16:
+        {
+            U32 h32 = XXH32_digest(state32);
+	    sprintf(hexstring,"%x",h32);
+	    hexstring[strlen(hexstring)/2]=0;
+	    result = (int)strtol(hexstring, NULL, 16);
+            break;
+        }
     case algo_xxh32:
         {
             U32 h32 = XXH32_digest(state32);
-            XXH32_canonical_t hcbe32;
-            XXH32_canonicalFromHash(&hcbe32, h32);
-            displayEndianess==big_endian ?
-                BMK_display_BigEndian(&hcbe32, sizeof(hcbe32),outFile) : BMK_display_LittleEndian(&hcbe32, sizeof(hcbe32),outFile);
-	    fputs(" ",outFile);
+	    result = h32;
             break;
         }
-    case algo_xxh64:
+   /* case algo_xxh64:
         {
             U64 h64 = XXH64_digest(state64);
             XXH64_canonical_t hcbe64;
@@ -617,16 +590,13 @@ static int BMK_hash(const char* fileName,
                 BMK_display_BigEndian(&hcbe64, sizeof(hcbe64),outFile) : BMK_display_LittleEndian(&hcbe64, sizeof(hcbe64),outFile);
             fputs(" ",outFile);
             break;
-        }
+        }*/
     default:
             break;
     }
-	readSize = fscanf(inFile,"%s",buffer);
-} 
-      fclose(inFile);
-    free(buffer);
-
-    return 0;
+    
+    printf("%d\n",result);
+    return result;
 }
 
 
@@ -657,7 +627,7 @@ static int usage(const char* exename)
     DISPLAY( "      %s [arg] [filenames]\n", exename);
     DISPLAY( "When no filename provided, or - provided : use stdin as input\n");
     DISPLAY( "Arguments :\n");
-    DISPLAY( " -H# : hash selection : 0=32bits, 1=64bits (default: %i)\n", (int)g_defaultAlgo);
+    DISPLAY( " -H# : hash selection : 0=8 bits, 1=16bits, 2=32bits, 3=64bits (default: %i)\n", (int)g_defaultAlgo);
     DISPLAY( " -h  : help \n");
     return 0;
 }
