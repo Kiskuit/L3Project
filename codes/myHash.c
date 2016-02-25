@@ -2,24 +2,50 @@
 #include <stdio.h>
 #include <math.h>
 
-int MyHash(char* mot, int sizeTable){
+#define MYHASHTHETA 0.6180339887
+/*int MyHash(char* mot, int sizeTable){
+}*/
+void Transform(char* mot);
+unsigned int *Chunks(char* mot, int* size);
+unsigned int XorChunks(unsigned int *chunks,int size);
+unsigned int HashMult(unsigned int e, unsigned int sizeTable);
+int main(int argc, char** argv){
+    char test1[5];
+    char test2[6];
+    scanf("%s",test1);
+    scanf("%s",test2);
+    Transform(test1);
+    printf("(%d)(%d)(%d)(%d)\n",test1[0],test1[1],test1[2],test1[3]);
+    Transform(test2);
+    printf("(%d)(%d)(%d)(%d)(%d)\n",test2[0],test2[1],test2[2],test2[3],test2[4]);
+    int size1  = -1, size2 = -1;
+    unsigned int *c1 = Chunks(test1, &size1);
+    unsigned int *c2 = Chunks(test2, &size2);
+    printf("1 : %u\n",XorChunks(c1,size1));
+    printf("2 : %u\n",XorChunks(c2,size2));
+    printf("1 : %u\n",HashMult(XorChunks(c1,size1),256));
+    printf("2 : %u\n",HashMult(XorChunks(c2,size2),256));
+    return 0;
 }
 
 /* This function receives a word *mot* in plain text (char*)
  * It codes every letter capital or not indistinctly onto a 
  * number between 1 and 26.
- * Digits are coded to numbers between 27 and 36 (TODO).
+ * Digits are coded to numbers between 27 and 36.
  * Every other caracters are ignored (coded to 0).
  * Transformation is such that in the end, every character
  * of *mot* can be encoded onto 6bits */
 void Transform(char* mot){
-    while(mot++){
-        if( 65<=mot && mot<=90 )
-            mot-=65;
-        else if (97<=mot && mot<=122)
-            mot-=97;
+    while(*mot){
+        if( 65<=*mot && *mot<=90 )
+            *mot-=54;//Mapped to 11-36
+        else if (97<=*mot && *mot<=122)
+            *mot-=86;//Mapped to 11-36
+        else if (48<=*mot && *mot<=57)
+            *mot-=47;//Mapped to 1-10
         else
-            mot=0;
+            *mot=0;
+        *mot++;
     }
 }
 
@@ -28,35 +54,52 @@ void Transform(char* mot){
  * Chunks a word into parts of (SIZECHUNK*6) bits long */
 unsigned int *Chunks(char* mot, int* size){
     //TODO DEPEND ON PARAM SIZECHUNK INSTEAD OF 3
-    char motBis = mot;//copy of the pointer
+    char *motBis = mot;//copy of the pointer
+    //Getting the length of the word
     int len = 0;
-    while (motBis++)//Getting the length of the word
+    while (*motBis++)
         len++;
-    *size = (int) ceil(len/3);
-    retVal = malloc(sizeof(unsigned int)*size);
+    //Computing the size of the returned array
+    // + dynamically allocating it
+    *size = (int) ceil(len/3.);
+    unsigned int *retVal = malloc(sizeof(unsigned int) * *size);
     
-    int shift = 0,i = 0;
-    while(mot++){//Parcours du mot
-        if(shift > 12)
-            shift = 0;
-        unsigned int tmp = *mot;
-        tmp << shift;
+    int shift = 12, i = 0, chunk = 0;
+    int j=0;
+    unsigned int tmp;
+    while((tmp = *mot++)){//Parcours du mot
+        if(shift < 0)
+            shift = 12;
+        tmp <<= shift;
         chunk |= tmp;
         i++;
         if(i==3){
             i = 0;
-            retVal[0] = chunk;
+            retVal[j] = chunk;
+            j++;
             chunk = 0;
-            retVal++;
         }
-        shift += 6
+        shift -= 6;
     }
+    if(i!=0)
+        retVal[j] = chunk;
+    return retVal;
 }
 
-int Hash(int* chunks, int size){
-    int hash = 0;
+/* Applies XOR binary function reccursively to every chunks
+ * between themselves, and return the final result as an int */
+unsigned int XorChunks(unsigned int *chunks, int size){
+    int retVal = 0;
     for(int i=0; i<size; i++){
-        hash ^= chunks[i];
+        retVal ^= chunks[i];
     }
-    return hash;
+    return retVal;
+}
+
+unsigned int HashMult(unsigned int e, unsigned int sizeTable){
+    double theta = MYHASHTHETA, retVal;
+    double dummy;
+    retVal = modf(e * theta, &dummy);
+    retVal *= sizeTable;
+    return (int) retVal;
 }
