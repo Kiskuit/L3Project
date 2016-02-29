@@ -740,5 +740,5 @@ CAMLprim value xx32sum_main(value ml_array)
     if ( (filenamesStart==0) && IS_CONSOLE(stdin) ) return badusage(exename);
 
     if (filenamesStart==0) filenamesStart = argc;
-    return Val_int(BMK_hashFiles(argv+filenamesStart, argc-filenamesStart, algo, displayEndianess));
+    return Val_int(BMK_hash(argv+filenamesStart, algo, displayEndianess));
 }
