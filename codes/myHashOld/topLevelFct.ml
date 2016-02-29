@@ -1,3 +1,4 @@
+open MyHash;;
 (* -------------------------------
  * Recuperation of parameters
  * ------------------------------*)
@@ -16,7 +17,7 @@ let get_fct =
     let fct_to_use = ref (-1) and number_of_fct = 2 in
     while ( !fct_to_use < 0 || !fct_to_use >= number_of_fct ); do
         print_string "0 : myHash function \n";
-        print_string "1 : xxHash function \n";
+        print_string "1 : xxHash function (size of the hashtable is set to 2^32)\n";
         print_string "Please chose the function you want to use : ";
         fct_to_use := read_int();
     done;
@@ -24,29 +25,12 @@ let get_fct =
     print_string "------------------------------------------\n";
     print_string "------------------------------------------\n";
     (* DUMMY function serving as placeholder *)
-    let dummy_fct m s = match(m,s) with |("dummy",0) -> 1 |_ -> 1 in
+    let dummy_fct s = if (s="test") then 1 else 2 in
     match !fct_to_use with
-    (*|0 -> myHash*)
-    |0 -> MyHash.xxhash
+    |0 -> myHash
     |1 -> dummy_fct
     |_ -> dummy_fct;;
 
-(* At execution : asks user what is the size of the hashTable
- * we should use, in power of 2
- * Then, returns the actual size of the table *)
-let get_size = 
-    let size_of_hashtable = ref 0 in
-    let ok_values = [8;16;30] in
-    while ( not (List.mem !size_of_hashtable ok_values) ); do
-        print_string "Please give the size of the hashTable in power of 2 (8,16,30) : 2^";
-        size_of_hashtable := read_int ();
-    done;
-    print_string "\n------------------------------------------\n";
-    print_string "------------------------------------------\n";
-    !size_of_hashtable;;
-
-let get_real_size () = 
-    int_of_float(2. ** (float get_size));;
 (* -------------------------------
  * Creation of the hashtable
  * And the tools we need to use it
@@ -57,7 +41,7 @@ Hashtbl.remove hashtable 0;;
 
 (* Checks if the hashtable contains a certain key *)
 let contains ht k = 
-    let list_k = Hashtbl.find_all ht (get_fct k get_size) in
+    let list_k = Hashtbl.find_all ht (get_fct k) in
     let rec helper = function
         |[] -> false
         |a::t -> if (a=k) then true else (helper t)
@@ -65,7 +49,7 @@ let contains ht k =
 
 (* Adds a pair (key,hash(key) to the hashtable, if it's not inside already *)
 let add_couple ht k = 
-    let v = (get_fct k get_size) in
+    let v = (get_fct k) in
     if (contains ht k) then () else Hashtbl.add ht v k;;
 
 let output_hashtable ht =
