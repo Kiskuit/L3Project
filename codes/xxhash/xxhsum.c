@@ -595,7 +595,7 @@ static int BMK_hash(const char* fileName,
             break;
     }
     
-    printf("%d\n",result);
+    //printf("%d\n",result);
     return result;
 }
 

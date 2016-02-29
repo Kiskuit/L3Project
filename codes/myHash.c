@@ -1,13 +1,14 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #include <caml/mlvalues.h>
 #include <caml/alloc.h>
 #include <caml/memory.h>
 //#include "myHash.h"
 
 #define MYHASHTHETA 0.6180339887
-unsigned int XorChunks(unsigned int *chunks, int size){
+static unsigned int XorChunks(unsigned int *chunks, int size){
     int retVal = 0;
     int i = 0;
     for(i=0; i<size; i++){
@@ -15,14 +16,14 @@ unsigned int XorChunks(unsigned int *chunks, int size){
     }
     return retVal;
 }
-unsigned int HashMult(unsigned int e, unsigned int sizeTable){
+static unsigned int HashMult(unsigned int e, unsigned int sizeTable){
     double theta = MYHASHTHETA, retVal;
     double dummy;
     retVal = modf(e * theta, &dummy);
     retVal *= sizeTable;
     return (int) retVal;
 }
-unsigned int *Chunks(char* mot, int* size){
+static unsigned int *Chunks(char* mot, int* size){
     //TODO DEPEND ON PARAM SIZECHUNK INSTEAD OF 3
     char *motBis = mot;//copy of the pointer
     //Getting the length of the word
@@ -55,6 +56,19 @@ unsigned int *Chunks(char* mot, int* size){
         retVal[j] = chunk;
     return retVal;
 }
+static void Transform(char* mot){
+    while(*mot){
+        if( 65<=*mot && *mot<=90 )
+            *mot-=54;//Mapped to 11-36
+        else if (97<=*mot && *mot<=122)
+            *mot-=86;//Mapped to 11-36
+        else if (48<=*mot && *mot<=57)
+            *mot-=47;//Mapped to 1-10
+        else
+            *mot=0;
+        *mot++;
+    }
+}
 
 /*int MyHash(char* mot, int sizeTable){
 }*/
@@ -64,7 +78,7 @@ CAMLprim value MyHash(value ml_array){
     int argc = Wosize_val(ml_array);
     
     if(argc != 2)
-        return 0;//TODO!!!
+        return Val_int(0);
     //Recup param
     const char* sizePowString = String_val(Field(ml_array,0));
     const char* motOriginal = String_val(Field(ml_array,1));
@@ -110,19 +124,6 @@ CAMLprim value MyHash(value ml_array){
  * Every other caracters are ignored (coded to 0).
  * Transformation is such that in the end, every character
  * of *mot* can be encoded onto 6bits */
-void Transform(char* mot){
-    while(*mot){
-        if( 65<=*mot && *mot<=90 )
-            *mot-=54;//Mapped to 11-36
-        else if (97<=*mot && *mot<=122)
-            *mot-=86;//Mapped to 11-36
-        else if (48<=*mot && *mot<=57)
-            *mot-=47;//Mapped to 1-10
-        else
-            *mot=0;
-        *mot++;
-    }
-}
 
 /* This function receives a word *mot* that must already have been
  * transformed. *size* can point to any INT and WILL be modified.
