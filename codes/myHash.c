@@ -1,14 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <caml/mlvalues.h>
+#include <caml/alloc.h>
+#include <caml/memory.h>
+#include "myHash.h"
 
-#define MYHASHTHETA 0.6180339887
 /*int MyHash(char* mot, int sizeTable){
 }*/
-void Transform(char* mot);
-unsigned int *Chunks(char* mot, int* size);
-unsigned int XorChunks(unsigned int *chunks,int size);
-unsigned int HashMult(unsigned int e, unsigned int sizeTable);
 int main(int argc, char** argv){
     char test1[5];
     char test2[6];
