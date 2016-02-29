@@ -11,6 +11,14 @@
 *.in
 *.out
 
+# C compilation files #
+#######################
+*.o
+
+# Project binaries #
+####################
+myHashC
+
 # Cleaner #
 ###########
 cleaner
