@@ -39,7 +39,7 @@ CAMLprim value murmurhash_main(value v){
 	
 	char* s = String_val(v);
 	int len = strlen(s);
-	 return Val_int(murmurhash(s,len,0));
+	 return Val_int(murmurhash(s,len,0)/16777216);
 	
 }
 

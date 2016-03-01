@@ -27,8 +27,8 @@ let get_fct =
     let dummy_fct m s = match(m,s) with |("dummy",0) -> 1 |_ -> 1 in
     match !fct_to_use with
     (*|0 -> myHash*)
-    |0 -> MyHash.xxhash
-    |1 -> dummy_fct
+    |0 -> Ocaml_murmurhash.murmurhash
+    (*|1 -> Ocaml_xxhash.xxhash*)
     |_ -> dummy_fct;;
 
 (* At execution : asks user what is the size of the hashTable
