@@ -1,0 +1,4 @@
+Voila des premiers echantillons, j'ai seulement pu faire marcher murmurhash, myHash me met tout les mots sur 0 apparament j'ai du
+faire une erreur d'ocaml qui est vachement plus compliqué que ce que j'ai déja fait
+pour ce qui est des différentes methodes j'ai pas le python de césar donc j'ai pas pu le faire, je m'y remet demain en ésperant que
+ce soit assez pour que tu puisse commencer l'analyse.
