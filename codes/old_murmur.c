@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <string.h>
 #include "murmurhash.h"
 #include <caml/mlvalues.h> /*val*/
 #include <caml/alloc.h>
@@ -36,45 +35,11 @@ CAMLparam1( ml_array );
 return Val_int(0);
 }*/
 
-CAMLprim value murmurhash_mask(value v){
+CAMLprim value murmurhash_main(value v){
 	
 	char* s = String_val(v);
 	int len = strlen(s);
-        int mask = 0;
-        switch(mask){
-            case 0 :
-                return Val_int(murmurhash(s,len,0)>>24);
-                //mask : 11111111000000000000000000000000
-            case 1:
-                return Val_int((murmurhash(s,len,0) >> 16) & 255);
-                //mask : 111111110000000000000000
-            case 2:
-                return Val_int((murmurhash(s,len,0) >> 8) & 255);
-                //mask : 1111111100000000
-            case 3 :
-                return Val_int(murmurhash(s,len,0) & 255);
-                //mask : 11111111
-            case 4 :
-                return Val_int((murmurhash(s,len,0) >> 22) & 255);
-                //mask : 111111110000000000000000000000
-            case 5 :
-                return Val_int((murmurhash(s,len,0) >> 20) & 255);
-                //mask : 1111111100000000000000000000
-            case 6 :
-                return Val_int((murmurhash(s,len,0) >> 18) & 255);
-                //mask : 11111111000000000000000000
-            case 7 :
-                return Val_int((murmurhash(s,len,0) >> 14) & 255);
-                //mask : 1111111100000000000000
-            case 8 :
-                return Val_int((murmurhash(s,len,0) >> 12) & 255);
-                //mask : 11111111000000000000
-            default :
-                return Val_int((murmurhash(s,len,0) >> 10) & 255);
-                //mask : 111111110000000000
-        }
-                
-	return Val_int(murmurhash(s,len,0)>>24);
+	 return Val_int(murmurhash(s,len,0)>>24);
 	
 }
 

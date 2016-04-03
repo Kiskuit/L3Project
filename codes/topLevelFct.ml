@@ -16,7 +16,8 @@ let get_fct =
     let fct_to_use = ref (-1) and number_of_fct = 2 in
     while ( !fct_to_use < 0 || !fct_to_use >= number_of_fct ); do
         print_string "0 : myHash function \n";
-        print_string "1 : xxHash function \n";
+        print_string "1 : xxHash function (currently unavailable) \n";
+        print_string "2 : murmurhash function \n";
         print_string "Please chose the function you want to use : ";
         fct_to_use := read_int();
     done;
@@ -27,8 +28,9 @@ let get_fct =
     let dummy_fct m s = match(m,s) with |("dummy",0) -> 1 |_ -> 1 in
     match !fct_to_use with
     (*|0 -> myHash*)
-    |0 -> Ocaml_murmurhash.murmurhash
-    (*|1 -> Ocaml_xxhash.xxhash*)
+    |0 -> MyHash.myhash
+    |1 -> Ocaml_xxhash.xxhash
+    |2 -> Ocaml_murmurhash.murmurhash
     |_ -> dummy_fct;;
 
 (* At execution : asks user what is the size of the hashTable
