@@ -36,7 +36,7 @@ CAMLparam1( ml_array );
 return Val_int(0);
 }*/
 
-#define MASK 0
+#define MASK 3
 
 CAMLprim value murmurhash_mask(value v){
 	

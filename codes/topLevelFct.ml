@@ -13,7 +13,7 @@ let get_filename =
 (* At execution : asks which function will be used 
  * Then, returns the function which will be used *)
 let get_fct =
-    let fct_to_use = ref (-1) and number_of_fct = 2 in
+    let fct_to_use = ref (-1) and number_of_fct = 3 in
     while ( !fct_to_use < 0 || !fct_to_use >= number_of_fct ); do
         print_string "0 : myHash function \n";
         print_string "1 : xxHash function (currently unavailable) \n";
